@@ -6,3 +6,4 @@ ephemeral-port-reserve==1.1.0
 python-daemon==2.2.0
 filelock==3.0.9
 flask==1.0.2
+flask-jsonrpc==0.3.1
