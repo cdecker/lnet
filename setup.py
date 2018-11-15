@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="lnet",
-    version="0.0.1",
+    version="0.0.2",
     author="Christian Decker",
     author_email="decker.christian+pypi@gmail.com",
     description="Utilities to define and bootstrap lightning networks for testing",
