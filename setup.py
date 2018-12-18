@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="lnet",
-    version="0.0.3",
+    version="0.0.4",
     author="Christian Decker",
     author_email="decker.christian+pypi@gmail.com",
     description="Utilities to define and bootstrap lightning networks for testing",
@@ -16,15 +16,15 @@ setup(
     packages=['lnet'],
     scripts=['bin/lnet-cli', 'bin/lnet-daemon'],
     install_requires=[
-        "click==7.0"
-        "pylightning==0.0.4"
-        "pydot==1.2.4"
-        "python-bitcoinlib==0.7.0"
-        "ephemeral-port-reserve==1.1.0"
-        "python-daemon==2.2.0"
-        "filelock==3.0.9"
-        "flask==1.0.2"
-        "flask-jsonrpc==0.3.1"
+        "click==7.0",
+        "pylightning==0.0.4",
+        "pydot==1.2.4",
+        "python-bitcoinlib==0.7.0",
+        "ephemeral-port-reserve==1.1.0",
+        "python-daemon==2.2.0",
+        "filelock==3.0.9",
+        "flask==1.0.2",
+        "flask-jsonrpc==0.3.1",
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
