@@ -4,6 +4,9 @@ from setuptools import find_packages, setup
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+
+dependencies = [l.strip() for l in open('requirements.txt')]
+
 setup(
     name="lnet",
     version="0.0.4",
@@ -15,17 +18,7 @@ setup(
     url="https://github.com/cdecker/lnet",
     packages=['lnet'],
     scripts=['bin/lnet-cli', 'bin/lnet-daemon'],
-    install_requires=[
-        "click==7.0",
-        "pylightning==0.0.4",
-        "pydot==1.2.4",
-        "python-bitcoinlib==0.7.0",
-        "ephemeral-port-reserve==1.1.0",
-        "python-daemon==2.2.0",
-        "filelock==3.0.9",
-        "flask==1.0.2",
-        "flask-jsonrpc==0.3.1",
-    ],
+    install_requires=dependencies,
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: BSD License",
