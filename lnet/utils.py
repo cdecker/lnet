@@ -14,6 +14,7 @@ from bitcoin.rpc import RawProxy as BitcoinProxy
 from decimal import Decimal
 from ephemeral_port_reserve import reserve
 from lightning import LightningRpc
+from pkg_resources import parse_version
 
 BITCOIND_CONFIG = {
     "regtest": 1,
@@ -397,8 +398,17 @@ class LightningNode(object):
                 r'Funding tx {} depth'.format(fundingtx['txid']))
         return {'address': addr, 'wallettxid': wallettxid, 'fundingtx': fundingtx}
 
-    def fundwallet(self, sats, addrtype="p2sh-segwit"):
-        addr = self.rpc.newaddr(addrtype)['address']
+    def fundwallet(self, sats, addrtype=None):
+        if addrtype is None:
+            addrtype = self.defaultaddr
+            addrkey = self.addrkey
+        else:
+            if self.addrkey == "address":
+                addrkey = self.addrkey
+            else:
+                addrkey = addrtype
+
+        addr = self.rpc.newaddr(addrtype)[addrkey]
         txid = self.bitcoin.rpc.sendtoaddress(addr, sats / 10**8)
         self.bitcoin.generate_block(1)
         self.daemon.wait_for_log('Owning output .* txid {}'.format(txid))
@@ -446,6 +456,12 @@ class LightningNode(object):
         self.info = self.rpc.getinfo()
         # This shortcut is sufficient for our simple tests.
         self.port = self.info['binding'][0]['port']
+        if parse_version(self.info['version']) <= parse_version('v0.7.0-11-g3e67c09'):
+            self.addrkey = "address"
+            self.defaultaddr = "p2sh-segwit"
+        else:
+            self.addrkey = "bech32"
+            self.defaultaddr = "bech32"
 
     def stop(self, timeout=10):
         """ Attempt to do a clean shutdown, but kill if it hangs
@@ -489,7 +505,7 @@ class LightningNode(object):
     def fund_channel(self, l2, amount):
 
         # Give yourself some funds to work with
-        addr = self.rpc.newaddr()['address']
+        addr = self.rpc.newaddr()[self.addrkey]
         self.bitcoin.rpc.sendtoaddress(addr, (amount + 1000000) / 10**8)
         numfunds = len(self.rpc.listfunds()['outputs'])
         self.bitcoin.generate_block(1)
@@ -740,7 +756,11 @@ class NodeFactory(object):
 
         # If we got here, we want to fund channels
         for src, dst in connections:
-            addr = src.rpc.newaddr()['address']
+            if parse_version(src.info['version']) <= parse_version('v0.7.0-11-g3e67c09'):
+                addrkey = "address"
+            else:
+                addrkey = "bech32"
+            addr = src.rpc.newaddr()[addrkey]
             src.bitcoin.rpc.sendtoaddress(addr, (fundamount + 1000000) / 10**8)
 
         bitcoin.generate_block(1)
