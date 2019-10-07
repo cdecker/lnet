@@ -108,7 +108,7 @@ def start(dotfile):
         if channel['state'] != 'CHANNELD_AWAITING_LOCKIN':
             return False
         return True
-        
+
     for e in dot.get_edges():
         points = e.obj_dict['points']
         print("Connecting {} <-> {}".format(*points))
@@ -127,7 +127,7 @@ def start(dotfile):
         while not channel_confirming(src, dst):
             time.sleep(0.1)
 
-    current_app.bitcoind.rpc.generate(6)
+    current_app.bitcoind.generate_block(6)
     print('Waiting for gossip to propagate')
     while True:
         count = sum([len(n.rpc.listnodes()['nodes']) for n in nf.nodes])
