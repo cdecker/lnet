@@ -17,7 +17,7 @@ setup(
     scripts=['bin/lnet-cli', 'bin/lnet-daemon'],
     install_requires=[
         "click==7.0",
-        "pylightning==0.0.4",
+        "pylightning==0.0.7",
         "pydot==1.2.4",
         "python-bitcoinlib==0.7.0",
         "ephemeral-port-reserve==1.1.0",
