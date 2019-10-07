@@ -211,18 +211,25 @@ def stop():
 
 @app.route("/")
 def hello():
-    return """
+    response = """
     <h1>lnet</h1>
-    <p>Visit <a href='/api/browse'>API browser</a> to see how it works</p>
+    <p>Visit <a href='/api/browse'>JSON-RPC browser</a></p>
     """
-
+    if hasattr(current_app, 'src'):
+        response += "<p><a href='/net'>Visualize your network</a></p>"
+    return response
 
 @app.route("/net")
 def net():
+    if not hasattr(current_app, 'src'):
+        return "No network currently running"
     graph = pydot.graph_from_dot_data(current_app.src)
     assert(len(graph) == 1)
     graph = graph[0]
-    graph.write_svg('/tmp/net.svg')
+    try:
+        graph.write_svg('/tmp/net.svg')
+    except FileNotFoundError:
+        return 'You must download graphviz to use this tool. <a href="https://github.com/BVLC/caffe/issues/4911">Some help</a>'
     return open('/tmp/net.svg', 'r').read()
 
 
