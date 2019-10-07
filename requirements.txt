@@ -1,6 +1,6 @@
 click==7.0
 pylightning==0.0.7
-pydot==1.2.4
+pydot==1.4.1
 python-bitcoinlib==0.7.0
 ephemeral-port-reserve==1.1.1
 python-daemon==2.2.0
