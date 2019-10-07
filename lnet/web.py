@@ -1,5 +1,4 @@
-from flask import Flask, current_app, Response
-from flask import g
+from flask import Flask, current_app, Response, g, request
 from flask_jsonrpc import JSONRPC
 import os
 import dot_parser
@@ -209,9 +208,13 @@ def stop():
     current_app.executor.shutdown(wait=False)
     current_app.started = False
 
+
 @app.route("/")
 def hello():
-    return "Hello World!"
+    return """
+    <h1>lnet</h1>
+    <p>Visit <a href='/api/browse'>API browser</a> to see how it works</p>
+    """
 
 
 @app.route("/net")
@@ -242,8 +245,6 @@ def register(bitcoind, node_factory):
     g.bitcoind = bitcoind
     g.node_factory = node_factory
 
-
-from flask import request
 
 def shutdown_server():
     func = request.environ.get('werkzeug.server.shutdown')
