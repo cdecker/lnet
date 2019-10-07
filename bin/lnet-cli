@@ -9,7 +9,7 @@ import click
 import daemon
 import dot_parser
 import os
-import requests
+from urllib.request import urlopen
 import json
 import sys
 
@@ -21,11 +21,15 @@ def cli():
 from lockfile import LockFile
 
 
+def is_running(url):
+    with urlopen(url) as response:
+        return response.status == 200
+
 def server():
     running = False
+    url = 'http://localhost:5000/'
     try:
-        requests.get('http://localhost:5000/')
-        running = True
+        running = is_running(url)
     except Exception:
         pass
     
@@ -34,8 +38,7 @@ def server():
 
     while not running:
         try:
-            requests.get('http://localhost:5000/')
-            running = True
+            running = is_running(url)
         except Exception:
             pass
         
