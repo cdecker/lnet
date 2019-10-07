@@ -176,12 +176,12 @@ def node_rpc(node_name, method, params):
     
     sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
     sock.connect(node.rpc.socket_path)
-    UnixDomainSocketRpc._writeobj(sock, {
+    rpc._writeobj(sock, {
         "method": method,
         "params": params,
         "id": 0
     })
-    resp = UnixDomainSocketRpc._readobj(rpc, sock)
+    resp, _ = rpc._readobj(sock)
     sock.close()
     if "error" in resp:
         raise ValueError(resp['error'])
